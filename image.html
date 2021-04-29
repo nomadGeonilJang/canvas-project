@@ -15,7 +15,7 @@
             align-items: center;
             width: 500px;
         }
-        .color-btn{
+        button{
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -24,6 +24,7 @@
             margin:0 5px;
             cursor: pointer;
         }
+      
         .color-btn[data-color=black]{
             background-color: black;
         }
@@ -45,19 +46,29 @@
         .active{
             border:4px solid pink;
         }
+
+        .result-image{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
     </style>
 </head>
 
 <body>
+    <div class="result-image"></div>
     <canvas class="canvas" width="500", height="500"></canvas>
     <div class="control">
-        <button class="color-btn active" data-color="black"></button>
-        <button class="color-btn" data-color="red"></button>
-        <button class="color-btn" data-color="green"></button>
-        <button class="color-btn" data-color="blue"></button>
-        <button class="image-btn"></button>
+        <button class="color-btn active"  data-type="color" data-color="black"></button>
+        <button class="color-btn"  data-type="color" data-color="red"></button>
+        <button class="color-btn"  data-type="color" data-color="green"></button>
+        <button class="color-btn"  data-type="color" data-color="blue"></button>
+        <button class="image-btn" data-type="image" ></button>
+        <button class="save-btn">save</button>
     </div>
     <script>
+        const resultImage= document.querySelector('.result-image');
+        const saveButton = document.querySelector(".save-btn");
         const control = document.querySelector(".control");
         const canvas = document.querySelector(".canvas");
         const ctx = canvas.getContext('2d');
@@ -66,15 +77,21 @@
         imageEl.src = './logo192.png';
 
         
+        let brush = 'color' // image
         let isDrawing = false;
         let color = 'black';
 
         function handleDrawing({layerX, layerY}){
-            if(isDrawing){
-                ctx.beginPath();
-                ctx.arc(layerX,layerY,10,0, Math.PI * 2, false);
-                ctx.fill();
-            }
+            if(!isDrawing) return;
+
+            ctx.beginPath();
+            brush === 'color' ? 
+            ctx.arc(layerX,layerY,10,0, Math.PI * 2, false) : 
+            ctx.drawImage(imageEl, layerX, layerY, 20,20 )
+          
+            ctx.fill();
+              
+            
         }
 
         function toggleDrawing(){
@@ -86,18 +103,26 @@
                 document.querySelector(`.active`).classList.remove("active")
                 ctx.fillStyle = e.target.dataset.color;
                 e.target.classList.add("active");
+                brush = 'color'
             }
 
-            if(e.target.classList.contains("image-btn")){
-                console.log(imageEl)
+            if(e.target.dataset.type){
+                brush = e.target.dataset.type
             }
         }
      
+        function handleSaveCanvasToImage(){
+            const url = canvas.toDataURL('image/png');
+            const imageEl = new Image();
+            imageEl.src = url;
+            resultImage.append(imageEl)
+        }
 
         canvas.addEventListener('mousemove',handleDrawing);
         canvas.addEventListener("mousedown", toggleDrawing)
         canvas.addEventListener("mouseup", toggleDrawing);
-        control.addEventListener("click",setColor)
+        control.addEventListener("click",setColor);
+        saveButton.addEventListener('click',handleSaveCanvasToImage);
     </script>
 </body>
 </html>
