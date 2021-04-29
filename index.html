@@ -5,8 +5,54 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas Project</title>
+    <style>
+        canvas{
+            background:#eee;
+        }
+    </style>
 </head>
 <body>
-    <canvas></canvas>
+    <canvas class="canvas" width="600" height="400"></canvas>
+    <script>
+
+        function toRadian(deg){
+            return deg * Math.PI / 180;
+        }
+
+        const canvas = document.querySelector(".canvas");
+        const ctx = canvas.getContext('2d');
+        // 사각형 fillRect
+        // 지우기 clearRect
+        // 선 strokeRect 
+        ctx.fillStyle = 'red';
+        ctx.fillRect(50,50,100,100);
+        ctx.fillStyle = 'purple';
+        ctx.fillRect(0,0,100,100);
+
+        // 선
+        // beginPath
+        // moveTo
+        // lineTo
+        // closePath
+        ctx.beginPath(100,100);
+        ctx.moveTo(200,200);
+        ctx.lineTo(300,200);
+        ctx.stroke();
+        ctx.closePath();
+
+        //호
+        // beginPath
+        // arc
+        // closePath
+        // stroke() 선
+        // fill() 채우기
+        ctx.beginPath();
+        ctx.arc(300,200, 50, 0, toRadian(180), false);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(100,100, 50, 0, toRadian(180), false);
+        ctx.fill();
+
+    </script>
 </body>
 </html>
