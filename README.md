@@ -11,3 +11,6 @@
 ## 그림을 그리는 개념으로! 생각합시다
 1. fillRect
 2. fillStyle
+
+## requestAnimationFrame
+1. 16.5ms

@@ -47,11 +47,43 @@
         // stroke() 선
         // fill() 채우기
         ctx.beginPath();
-        ctx.arc(300,200, 50, 0, toRadian(180), false);
+        ctx.moveTo(300,200);
+        ctx.arc(300,300, 50, 0, toRadian(180), false);
+        ctx.lineTo(300,200);
         ctx.stroke();
         ctx.beginPath();
         ctx.arc(100,100, 50, 0, toRadian(180), false);
         ctx.fill();
+
+        // requestAnimationFrame
+
+        let i = 0 
+        let j = 0;
+        let count = 0;
+        function draw(){
+            
+            if(count % 30 === 0 ){
+                ctx.clearRect(0,0,canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(100 + i, 350 + j, 40, 0, toRadian(360), false);
+                ctx.fill();
+                ctx.closePath();
+                i += 1;
+                if(i > 1000){
+                    i =0 ;
+                }
+            }
+            count++
+            requestAnimationFrame(draw)
+          
+            // setInterval(()=>{
+            //     draw();
+            // },1000)
+            
+        }
+        draw();
+        
+        
 
     </script>
 </body>
