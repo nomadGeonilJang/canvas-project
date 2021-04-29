@@ -62,19 +62,24 @@
         let count = 0;
         function draw(){
             
-            if(count % 30 === 0 ){
+            if(count % 15 === 0 ){
                 ctx.clearRect(0,0,canvas.width, canvas.height);
                 ctx.beginPath();
-                ctx.arc(100 + i, 350 + j, 40, 0, toRadian(360), false);
+                ctx.arc(i, 350 + j, 40, 0, toRadian(360), false);
                 ctx.fill();
                 ctx.closePath();
-                i += 1;
-                if(i > 1000){
-                    i =0 ;
+                i += 20;
+                if(i >= canvas.width - 40){
+                    i = 0;
                 }
             }
             count++
-            requestAnimationFrame(draw)
+            const timerId = requestAnimationFrame(draw)
+            if(count >= 400){
+                cancelAnimationFrame(timerId);
+            }
+
+            
           
             // setInterval(()=>{
             //     draw();

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color: #eee;
+        }
+        .control{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 500px;
+        }
+        .color-btn{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            outline: none;
+            border:none;
+            margin:0 5px;
+            cursor: pointer;
+        }
+        .color-btn[data-color=black]{
+            background-color: black;
+        }
+        .color-btn[data-color=red]{
+            background-color: red;
+        }
+        .color-btn[data-color=green]{
+            background-color: green;
+        }
+        .color-btn[data-color=blue]{
+            background-color: blue;
+        }
+        .image-btn{
+            width: 30px;
+            height: 30px;
+            background:url(./logo192.png) no-repeat 50% 50% / cover;
+        }
+
+        .active{
+            border:4px solid pink;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas class="canvas" width="500", height="500"></canvas>
+    <div class="control">
+        <button class="color-btn active" data-color="black"></button>
+        <button class="color-btn" data-color="red"></button>
+        <button class="color-btn" data-color="green"></button>
+        <button class="color-btn" data-color="blue"></button>
+        <button class="image-btn"></button>
+    </div>
+    <script>
+        const control = document.querySelector(".control");
+        const canvas = document.querySelector(".canvas");
+        const ctx = canvas.getContext('2d');
+
+        const imageEl = new Image();
+        imageEl.src = './logo192.png';
+
+        
+        let isDrawing = false;
+        let color = 'black';
+
+        function handleDrawing({layerX, layerY}){
+            if(isDrawing){
+                ctx.beginPath();
+                ctx.arc(layerX,layerY,10,0, Math.PI * 2, false);
+                ctx.fill();
+            }
+        }
+
+        function toggleDrawing(){
+            isDrawing = !isDrawing;
+        }
+
+        function setColor(e){
+            if(e.target.dataset.color){
+                document.querySelector(`.active`).classList.remove("active")
+                ctx.fillStyle = e.target.dataset.color;
+                e.target.classList.add("active");
+            }
+
+            if(e.target.classList.contains("image-btn")){
+                console.log(imageEl)
+            }
+        }
+     
+
+        canvas.addEventListener('mousemove',handleDrawing);
+        canvas.addEventListener("mousedown", toggleDrawing)
+        canvas.addEventListener("mouseup", toggleDrawing);
+        control.addEventListener("click",setColor)
+    </script>
+</body>
+</html>
