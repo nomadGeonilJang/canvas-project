@@ -14,26 +14,98 @@
 <body>
     <canvas class="canvas" width="600" height="400"></canvas>
     <script>
+
+        const boxes = [];
+        let target = 0;
         const canvas = document.querySelector(".canvas");
         const ctx = canvas.getContext('2d');
+        ctx.font = "bold 30px sans-serif";
 
-        ctx.fillRect(100,100,200,200)
-        ctx.fillStyle = "orange";
-        ctx.fillRect(200,200,200,200);
-        ctx.save();
 
-        ctx.fillStyle = 'blue';
-        ctx.beginPath();
-        ctx.arc(300,300,50,0, Math.PI * 2);
-        ctx.fill();
+        class Box{
+            constructor(index, x, y, speed){
+                this.index = index;
+                this.x = x;
+                this.y = y;
+                this.width = 100;
+                this.height = 100;
+                this.speed = speed;
+                this.color = "#fff";
+                this.draw();
+            }
 
-        ctx.restore();
+            draw(){
+                ctx.fillStyle = "rgba(0,0,0,0.5)"
+                ctx.fillRect(this.x, this.y , this.width ,this.height);
+                ctx.fillStyle = this.color;
+                ctx.fillText(this.index, this.x + 5, this.y + 30);
+            }
+        }
 
-        ctx.beginPath();
-        ctx.arc(300,300,20,0, Math.PI * 2);
-        ctx.fill();
 
-      
+        for(let i = 0 ; i < 10 ; i++){
+            boxes.push(new Box(
+                i, 
+                Math.random() * canvas.width * 0.8,
+                Math.random() * canvas.height * 0.8,
+                Math.random() * 4 + 1
+            ))
+        }
+
+        function render(){
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            let box;
+            for(let i = 0 ; i < boxes.length ; i++){
+                box = boxes[i];
+                box.x += box.speed;
+
+                if(box.x > canvas.width){
+                    box.x = -box.width;
+                }
+
+                box.draw();
+            }
+            ctx.font = "bold 30 san-serif";
+            ctx.fillStyle = "red"
+            ctx.fillText(target, canvas.width - 50, 30)
+            requestAnimationFrame(render)
+        }
+
+        render();
+
+
+        
+        canvas.addEventListener('click',({layerX, layerY})=>{
+
+            let box;
+            let selectedItem;
+            for(let i = 0 ; i < boxes.length; i++){
+                box = boxes[i];
+                if(
+                    layerX >= box.x && layerX <= box.x + box.width &&
+                    layerY >= box.y && layerY <= box.y + box.height
+                ){
+                    selectedItem = box.index
+                }
+            }
+
+            if(selectedItem >= 0){
+                const index = boxes.findIndex(box => box.index === selectedItem)
+                if(target === selectedItem){
+                    boxes.splice(index, 1)
+                    target++;
+                    if(target === 10){
+                        target = "win"
+                    }
+                }
+            }
+        })
+
+        
+
+        
+
+
         
 
     </script>
